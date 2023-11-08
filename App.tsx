@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { Children } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -15,104 +7,112 @@ import {
   Text,
   useColorScheme,
   View,
+  Alert,
+  Pressable,
+  Dimensions
 } from 'react-native';
+import Tile from '../HabitTracker/components/tile';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+function PageContainer({children}: any): JSX.Element {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.pageContainer}>
+      {children}
     </View>
   );
 }
+const windowHeight = Dimensions.get('window').height;
+const PRIMARY_COLOR = '#8B5CF6';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const DAYS_COLOR_MAP = {
+    'Monday': 'red',
+    'Tuesday': 'green',
+    'Wednesday': 'blue',
+    'Thursday': 'yellow',
+    'Friday': 'pink',
+    'Saturday': 'purple',
+    'Sunday': 'brown'
+  }
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: '#000',
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle={'light-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
+        <PageContainer
+          style={styles.pageContainer}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.textStyle}>
+                HABIT TRACKER
+              </Text>
+              <Pressable style={styles.newButton} onPress={() => Alert.alert('Simple Button pressed')}>
+                <Text style={styles.textStyle}>New</Text>
+              </Pressable>
+            </View>
+
+            <View style={styles.calendarContainer}>
+              {DAYS.map((day, index) => {
+                return(
+                  <View style={styles.calendarColumnContainer}>
+                    <Text>{day}</Text>
+                    <Tile color={DAYS_COLOR_MAP[day]} handlePress={() => Alert.alert(`Today is ${day}`)} key={index}/>
+                  </View>
+                )
+              }
+              )}
+            </View>
+        </PageContainer>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  pageContainer: {
+    paddingLeft: 32,
+    paddingRight: 32,
+    paddingTop: 64,
+    height: windowHeight
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  textStyle: {
+    color: '#fff'
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  headerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
-  highlight: {
-    fontWeight: '700',
+  newButton: {
+    borderColor: PRIMARY_COLOR,
+    borderWidth: 2,
+    borderRadius: 8,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingRight: 16,
+    paddingLeft: 16
   },
+  calendarContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    rowGap: 3,
+    justifyContent: 'space-between',
+    marginTop: 24
+  },
+  calendarColumnContainer: {
+    display: 'flex',
+    flexDirection: 'column'
+  }
 });
 
 export default App;
