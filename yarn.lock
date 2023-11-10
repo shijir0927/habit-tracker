@@ -2450,6 +2450,11 @@
   "resolved" "https://registry.npmjs.org/bytes/-/bytes-3.0.0.tgz"
   "version" "3.0.0"
 
+"calendar-js@^1.4.4":
+  "integrity" "sha512-KesBEbMZnjGzO/xl0ZcJVnezSRw3Xn/KaSUneY4LnANKlZwlllOtd6UGSyW8DSM+diUNi5dVVmSx4eZIMAA2Aw=="
+  "resolved" "https://registry.npmjs.org/calendar-js/-/calendar-js-1.4.4.tgz"
+  "version" "1.4.4"
+
 "call-bind@^1.0.0", "call-bind@^1.0.2", "call-bind@^1.0.4", "call-bind@^1.0.5":
   "integrity" "sha512-C3nQxfFZxFRVoJoGKKI8y3MOEo129NQ+FgQ08iye+Mk4zNZZGdjfs06bVTr+DBSlA66Q2VEcMki/cUCP4SercQ=="
   "resolved" "https://registry.npmjs.org/call-bind/-/call-bind-1.0.5.tgz"

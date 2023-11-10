@@ -12,8 +12,9 @@ import {
   Dimensions
 } from 'react-native';
 import Tile from '../HabitTracker/components/tile';
+import calendar from 'calendar-js';
 
-function PageContainer({children}: any): JSX.Element {
+function PageContainer({ children }: any): JSX.Element {
   return (
     <View style={styles.pageContainer}>
       {children}
@@ -26,7 +27,7 @@ const PRIMARY_COLOR = '#8B5CF6';
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  const DAYS_COLOR_MAP = {
+  const DAYS_COLOR_MAP: Object = {
     'Monday': 'red',
     'Tuesday': 'green',
     'Wednesday': 'blue',
@@ -51,17 +52,28 @@ function App(): JSX.Element {
         style={backgroundStyle}>
         <PageContainer
           style={styles.pageContainer}>
-            <View style={styles.headerContainer}>
-              <Text style={styles.textStyle}>
-                HABIT TRACKER
-              </Text>
-              <Pressable style={styles.newButton} onPress={() => Alert.alert('Simple Button pressed')}>
-                <Text style={styles.textStyle}>New</Text>
-              </Pressable>
-            </View>
+          <View style={styles.headerContainer}>
+            <Text style={styles.textStyle}>
+              HABIT TRACKER
+            </Text>
+            <Pressable style={styles.newButton} onPress={() => Alert.alert('Simple Button pressed')}>
+              <Text style={styles.textStyle}>New</Text>
+            </Pressable>
+          </View>
 
-            <View style={styles.calendarContainer}>
-              {DAYS.map((day, index) => {
+          <View style={styles.calendarContainer}>
+
+            {[...Array(calendar().of(2023, 10).days)].map((nil, index) => {
+              let day = index + 1
+              return (
+                <>
+                  <Text style={styles.textStyle}>{day}</Text>
+                  <Tile color={'#A78BFA'} handlePress={() => Alert.alert(`Today is ${day}`)} key={index} />
+                </>
+              );
+            })}
+
+            {/* {DAYS.map((day, index) => {
                 return(
                   <View style={styles.calendarColumnContainer}>
                     <Text>{day}</Text>
@@ -69,11 +81,11 @@ function App(): JSX.Element {
                   </View>
                 )
               }
-              )}
-            </View>
+              )} */}
+          </View>
         </PageContainer>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 
@@ -107,7 +119,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     rowGap: 3,
     justifyContent: 'space-between',
-    marginTop: 24
+    marginTop: 24,
+    flexWrap: 'wrap'
   },
   calendarColumnContainer: {
     display: 'flex',
