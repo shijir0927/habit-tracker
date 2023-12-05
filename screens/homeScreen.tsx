@@ -39,6 +39,10 @@ function HomeScreen({ navigation }): JSX.Element {
         }
     }
 
+    const getNumberOfDays = (year: number, month: number) => {
+        return calendar().of(year, month).days
+    }
+
     return (
         <SafeAreaView style={backgroundStyle}>
             <StatusBar
@@ -76,14 +80,14 @@ function HomeScreen({ navigation }): JSX.Element {
                             </Pressable>
                         </View>
                         <View style={styles.calendarWrapper}>
-                            {[...Array(calendar().of(2023, 10).days)].map((nil, index) => {
+                            {[...Array(getNumberOfDays(year, month - 1))].map((nil, index) => {
                                 let day = index + 1
                                 return (
                                     <>
                                         {/* <Text style={styles.textStyle}>{day}</Text> */}
-                                        <Tile color={'#A78BFA'} handlePress={() => navigation.navigate('Day', {
-                                            year: 2023,
-                                            month: 11,
+                                        <Tile color={'#A78BFA'} size={40} handlePress={() => navigation.navigate('Day', {
+                                            year: year,
+                                            month: month,
                                             day: day
                                         })} />
                                     </>
