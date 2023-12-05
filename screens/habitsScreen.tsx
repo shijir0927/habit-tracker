@@ -10,50 +10,13 @@ import {
     Pressable
 } from 'react-native';
 import { PageContainer } from '../components'
-import { firebase } from '../src/firebase/config';
-import { getDatabase, ref, child, get } from "firebase/database";
 
 function HabitsScreen(): JSX.Element {
     const backgroundStyle = {
         backgroundColor: '#000',
     };
 
-    const habitRef = firebase.firestore().collection('habits');
-
     const [newHabit, setNewHabit] = useState('');
-
-    const dbRef = ref(getDatabase());
-
-
-    const onAddButtonPress = () => {
-        const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-        const data = {
-            habit: 'drink water',
-            createdAt: timestamp,
-        };
-        habitRef
-            .add(data)
-            .then(_doc => {
-                setNewHabit('')
-            })
-            .catch((error) => {
-                Alert.alert("title", error);
-            });
-    }
-
-    const test = () => {
-        console.log("starteddddddd")
-        get(child(dbRef, `habits/1`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                Alert.alert("data: ", snapshot.val());
-            } else {
-                Alert.alert("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-        console.log("endedddddd")
-    }
 
     return (
         <SafeAreaView style={backgroundStyle}>
@@ -71,7 +34,7 @@ function HabitsScreen(): JSX.Element {
                             placeholder="Add a new habit"
                             placeholderTextColor='#A1A1AA'
                         />
-                        <Pressable style={styles.buttonStyle} onPress={test}>
+                        <Pressable style={styles.buttonStyle} onPress={() => Alert.alert(newHabit)}>
                             <Text style={styles.buttonTextStyle}>Add</Text>
                         </Pressable>
                     </View>

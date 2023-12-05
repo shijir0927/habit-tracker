@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Children } from 'react';
+import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomeScreen, DayScreen, HabitsScreen } from './screens';
