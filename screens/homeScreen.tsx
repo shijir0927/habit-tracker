@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React, { useState } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -6,6 +6,8 @@ import {
     StyleSheet,
     Text,
     View,
+    Pressable,
+    Alert
 } from 'react-native';
 import calendar from 'calendar-js';
 import { Tile, NewButton, PageContainer } from '../components'
@@ -14,6 +16,28 @@ function HomeScreen({ navigation }): JSX.Element {
     const backgroundStyle = {
         backgroundColor: '#000',
     };
+    const today = new Date();
+
+    const [month, setMonth] = useState(today.getMonth() + 1)
+    const [year, setYear] = useState(today.getFullYear())
+
+    const handlePrevMonth = () => {
+        if (month == 1) {
+            setMonth(12);
+            setYear(year => year - 1);
+        } else {
+            setMonth(currentMonth => currentMonth - 1)
+        }
+    }
+
+    const handleNextMonth = () => {
+        if (month == 12) {
+            setMonth(1);
+            setYear(year => year + 1);
+        } else {
+            setMonth(currentMonth => currentMonth + 1)
+        }
+    }
 
     return (
         <SafeAreaView style={backgroundStyle}>
@@ -42,20 +66,30 @@ function HomeScreen({ navigation }): JSX.Element {
                     </View>
 
                     <View style={styles.calendarContainer}>
-
-                        {[...Array(calendar().of(2023, 10).days)].map((nil, index) => {
-                            let day = index + 1
-                            return (
-                                <>
-                                    <Text style={styles.textStyle}>{day}</Text>
-                                    <Tile color={'#A78BFA'} handlePress={() => navigation.navigate('Day', {
-                                        year: 2023,
-                                        month: 11,
-                                        day: day
-                                    })} />
-                                </>
-                            );
-                        })}
+                        <View style={styles.calendarNav}>
+                            <Pressable onPress={() => handlePrevMonth()}>
+                                <Text style={styles.textStyle}>{"<"}</Text>
+                            </Pressable>
+                            <Text style={styles.textStyle}>{month} {year}</Text>
+                            <Pressable onPress={() => handleNextMonth()}>
+                                <Text style={styles.textStyle}>{">"}</Text>
+                            </Pressable>
+                        </View>
+                        <View style={styles.calendarWrapper}>
+                            {[...Array(calendar().of(2023, 10).days)].map((nil, index) => {
+                                let day = index + 1
+                                return (
+                                    <>
+                                        {/* <Text style={styles.textStyle}>{day}</Text> */}
+                                        <Tile color={'#A78BFA'} handlePress={() => navigation.navigate('Day', {
+                                            year: 2023,
+                                            month: 11,
+                                            day: day
+                                        })} />
+                                    </>
+                                );
+                            })}
+                        </View>
                     </View>
                 </PageContainer>
             </ScrollView>
@@ -67,7 +101,7 @@ const styles = StyleSheet.create({
     textStyle: {
         color: '#fff',
         fontFamily: 'Inter-Medium',
-        fontSize: 20
+        fontSize: 16
     },
     headerTextStyle: {
         color: '#fff',
@@ -78,19 +112,25 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 16
     },
     calendarContainer: {
+        display: 'flex',
+        alignItems: 'flex-start'
+    },
+    calendarNav: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 8
+    },
+    calendarWrapper: {
         display: 'flex',
         flexDirection: 'row',
         rowGap: 3,
         justifyContent: 'space-between',
         marginTop: 24,
         flexWrap: 'wrap'
-    },
-    calendarColumnContainer: {
-        display: 'flex',
-        flexDirection: 'column'
     },
     headerTiles: {
         display: 'flex',
