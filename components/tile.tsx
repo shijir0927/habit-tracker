@@ -14,12 +14,14 @@ type TileProps = PropsWithChildren<{
 
 function Tile({ color, handlePress, size = 40 }: TileProps): JSX.Element {
   return (
-    <Pressable onPress={handlePress} style={{ backgroundColor: color, width: size, height: size, borderRadius: 4 }} />
+    <Pressable onPress={handlePress} style={{ backgroundColor: color, width: size, height: size, ...styles.tile }} />
   );
 }
 
 const styles = StyleSheet.create({
-
+  tile: {
+    borderRadius: 4
+  }
 });
 
 export default Tile;
