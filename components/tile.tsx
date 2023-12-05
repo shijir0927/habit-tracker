@@ -20,7 +20,9 @@ function Tile({ color, handlePress, size = 40 }: TileProps): JSX.Element {
 
 const styles = StyleSheet.create({
   tile: {
-    borderRadius: 4
+    borderRadius: 4,
+    marginBottom: 5,
+    marginRight: 5
   }
 });
 

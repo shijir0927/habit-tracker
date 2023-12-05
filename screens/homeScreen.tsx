@@ -7,7 +7,9 @@ import {
     Text,
     View,
     Pressable,
-    Alert
+    Alert,
+    FlatList,
+    Dimensions
 } from 'react-native';
 import calendar from 'calendar-js';
 import { Tile, NewButton, PageContainer } from '../components'
@@ -16,6 +18,10 @@ function HomeScreen({ navigation }): JSX.Element {
     const backgroundStyle = {
         backgroundColor: '#000',
     };
+    const screenWidth = Dimensions.get("window").width;
+    const numOfColumns = 7;
+    const tileSize = (screenWidth - 64 - 35) / numOfColumns;
+
     const today = new Date();
 
     const [month, setMonth] = useState(today.getMonth() + 1)
@@ -42,6 +48,26 @@ function HomeScreen({ navigation }): JSX.Element {
     const getNumberOfDays = (year: number, month: number) => {
         return calendar().of(year, month).days
     }
+
+    const getCalendarData = () => {
+        let data = [];
+        for (let i = 1; i <= getNumberOfDays(year, month - 1); i++) {
+            data.push({ day: i })
+        }
+        return data;
+    }
+
+    const renderItem = ({ item }) => {
+        return (
+            <Tile color={'#A78BFA'} size={tileSize} handlePress={() => navigation.navigate('Day', {
+                year: year,
+                month: month,
+                day: item.day
+            })} />
+        );
+    };
+
+    const DAYS = ["M", "T", "W", "T", "F", "S", "S"];
 
     return (
         <SafeAreaView style={backgroundStyle}>
@@ -80,19 +106,22 @@ function HomeScreen({ navigation }): JSX.Element {
                             </Pressable>
                         </View>
                         <View style={styles.calendarWrapper}>
-                            {[...Array(getNumberOfDays(year, month - 1))].map((nil, index) => {
-                                let day = index + 1
-                                return (
-                                    <>
-                                        {/* <Text style={styles.textStyle}>{day}</Text> */}
-                                        <Tile color={'#A78BFA'} size={40} handlePress={() => navigation.navigate('Day', {
-                                            year: year,
-                                            month: month,
-                                            day: day
-                                        })} />
-                                    </>
-                                );
-                            })}
+                            <View style={styles.calendarDayContainer}>
+                                {DAYS.map((day) => {
+                                    return (
+                                        <View style={{ width: tileSize, height: tileSize, ...styles.calendarDayWrapper }}>
+                                            <Text style={styles.calendarDay}>{day}</Text>
+                                        </View>
+                                    )
+                                })}
+                            </View>
+                            <FlatList
+                                data={getCalendarData()}
+                                renderItem={renderItem}
+                                keyExtractor={item => item.day}
+                                numColumns={7}
+                                key={7}
+                            />
                         </View>
                     </View>
                 </PageContainer>
@@ -129,17 +158,29 @@ const styles = StyleSheet.create({
         gap: 8
     },
     calendarWrapper: {
-        display: 'flex',
-        flexDirection: 'row',
-        rowGap: 3,
-        justifyContent: 'space-between',
-        marginTop: 24,
-        flexWrap: 'wrap'
+        marginTop: 24
     },
     headerTiles: {
         display: 'flex',
         flexDirection: 'row',
         gap: 2
+    },
+    calendarDayContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start'
+    },
+    calendarDay: {
+        color: '#A1A1AA',
+        fontSize: 24
+    },
+    calendarDayWrapper: {
+        marginRight: 5,
+        marginBottom: 12,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
 
