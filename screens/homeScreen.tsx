@@ -52,18 +52,21 @@ function HomeScreen({ navigation }): JSX.Element {
     const getCalendarData = () => {
         let data = [];
         for (let i = 1; i <= getNumberOfDays(year, month - 1); i++) {
-            data.push({ day: i })
+            data.push({ year: year, month: month, day: i })
         }
         return data;
     }
 
     const renderItem = ({ item }) => {
         return (
-            <Tile color={'#A78BFA'} size={tileSize} handlePress={() => navigation.navigate('Day', {
-                year: year,
-                month: month,
-                day: item.day
-            })} />
+            <Tile color={'#A78BFA'}
+                size={tileSize}
+                isToday={today.getFullYear() == item.year && today.getMonth() + 1 == item.month && today.getDate() == item.day}
+                handlePress={() => navigation.navigate('Day', {
+                    year: year,
+                    month: month,
+                    day: item.day
+                })} />
         );
     };
 
@@ -75,57 +78,53 @@ function HomeScreen({ navigation }): JSX.Element {
                 barStyle={'light-content'}
                 backgroundColor={backgroundStyle.backgroundColor}
             />
-            <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                style={backgroundStyle}>
-                <PageContainer>
-                    <View style={styles.headerContainer}>
-                        <View>
-                            <View style={styles.headerTiles}>
-                                <Tile color={'#18181B'} handlePress={() => null} size={20} />
-                                <Tile color={'#4C1D95'} handlePress={() => null} size={20} />
-                                <Tile color={'#5B21B6'} handlePress={() => null} size={20} />
-                                <Tile color={'#6D28D9'} handlePress={() => null} size={20} />
-                                <Tile color={'#7C3AED'} handlePress={() => null} size={20} />
-                                <Tile color={'#8B5CF6'} handlePress={() => null} size={20} />
-                            </View>
-                            <Text style={styles.headerTextStyle}>habits</Text>
+            <PageContainer>
+                <View style={styles.headerContainer}>
+                    <View>
+                        <View style={styles.headerTiles}>
+                            <Tile color={'#18181B'} handlePress={() => null} size={20} />
+                            <Tile color={'#4C1D95'} handlePress={() => null} size={20} />
+                            <Tile color={'#5B21B6'} handlePress={() => null} size={20} />
+                            <Tile color={'#6D28D9'} handlePress={() => null} size={20} />
+                            <Tile color={'#7C3AED'} handlePress={() => null} size={20} />
+                            <Tile color={'#8B5CF6'} handlePress={() => null} size={20} />
                         </View>
-
-                        <NewButton handlePress={() => navigation.navigate('Habits')} />
+                        <Text style={styles.headerTextStyle}>habits</Text>
                     </View>
 
-                    <View style={styles.calendarContainer}>
-                        <View style={styles.calendarNav}>
-                            <Pressable onPress={() => handlePrevMonth()}>
-                                <Text style={styles.textStyle}>{"<"}</Text>
-                            </Pressable>
-                            <Text style={styles.textStyle}>{month} {year}</Text>
-                            <Pressable onPress={() => handleNextMonth()}>
-                                <Text style={styles.textStyle}>{">"}</Text>
-                            </Pressable>
-                        </View>
-                        <View style={styles.calendarWrapper}>
-                            <View style={styles.calendarDayContainer}>
-                                {DAYS.map((day) => {
-                                    return (
-                                        <View style={{ width: tileSize, height: tileSize, ...styles.calendarDayWrapper }}>
-                                            <Text style={styles.calendarDay}>{day}</Text>
-                                        </View>
-                                    )
-                                })}
-                            </View>
-                            <FlatList
-                                data={getCalendarData()}
-                                renderItem={renderItem}
-                                keyExtractor={item => item.day}
-                                numColumns={7}
-                                key={7}
-                            />
-                        </View>
+                    <NewButton handlePress={() => navigation.navigate('Habits')} />
+                </View>
+
+                <View style={styles.calendarContainer}>
+                    <View style={styles.calendarNav}>
+                        <Pressable onPress={() => handlePrevMonth()}>
+                            <Text style={styles.textStyle}>{"<"}</Text>
+                        </Pressable>
+                        <Text style={styles.textStyle}>{month} {year}</Text>
+                        <Pressable onPress={() => handleNextMonth()}>
+                            <Text style={styles.textStyle}>{">"}</Text>
+                        </Pressable>
                     </View>
-                </PageContainer>
-            </ScrollView>
+                    <View style={styles.calendarWrapper}>
+                        <View style={styles.calendarDayContainer}>
+                            {DAYS.map((day) => {
+                                return (
+                                    <View style={{ width: tileSize, height: tileSize, ...styles.calendarDayWrapper }}>
+                                        <Text style={styles.calendarDay}>{day}</Text>
+                                    </View>
+                                )
+                            })}
+                        </View>
+                        <FlatList
+                            data={getCalendarData()}
+                            renderItem={renderItem}
+                            keyExtractor={item => item.day}
+                            numColumns={7}
+                            key={7}
+                        />
+                    </View>
+                </View>
+            </PageContainer>
         </SafeAreaView >
     );
 }

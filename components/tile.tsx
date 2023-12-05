@@ -10,11 +10,16 @@ type TileProps = PropsWithChildren<{
   color: string;
   handlePress(): void;
   size?: number;
+  isToday?: boolean
 }>;
 
-function Tile({ color, handlePress, size = 40 }: TileProps): JSX.Element {
+function Tile({ color, handlePress, size = 40, isToday = false }: TileProps): JSX.Element {
+  let customStyle = {}
+  if (isToday) {
+    customStyle = { borderWidth: 2 }
+  }
   return (
-    <Pressable onPress={handlePress} style={{ backgroundColor: color, width: size, height: size, ...styles.tile }} />
+    <Pressable onPress={handlePress} style={{ backgroundColor: color, width: size, height: size, borderColor: 'white', ...styles.tile, ...customStyle }} />
   );
 }
 
