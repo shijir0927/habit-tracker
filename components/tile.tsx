@@ -9,11 +9,12 @@ import {
 type TileProps = PropsWithChildren<{
   color: string;
   handlePress(): void;
+  size?: number;
 }>;
 
-function Tile({ color, handlePress }: TileProps): JSX.Element {
+function Tile({ color, handlePress, size = 40 }: TileProps): JSX.Element {
   return (
-    <Pressable onPress={handlePress} style={{ backgroundColor: color, width: 40, height: 40, borderRadius: 8 }} />
+    <Pressable onPress={handlePress} style={{ backgroundColor: color, width: size, height: size, borderRadius: 4 }} />
   );
 }
 

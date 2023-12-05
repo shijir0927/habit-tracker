@@ -26,9 +26,18 @@ function HomeScreen({ navigation }): JSX.Element {
                 style={backgroundStyle}>
                 <PageContainer>
                     <View style={styles.headerContainer}>
-                        <Text style={styles.textStyle}>
-                            HABIT TRACKER
-                        </Text>
+                        <View>
+                            <View style={styles.headerTiles}>
+                                <Tile color={'#18181B'} handlePress={() => null} size={20} />
+                                <Tile color={'#4C1D95'} handlePress={() => null} size={20} />
+                                <Tile color={'#5B21B6'} handlePress={() => null} size={20} />
+                                <Tile color={'#6D28D9'} handlePress={() => null} size={20} />
+                                <Tile color={'#7C3AED'} handlePress={() => null} size={20} />
+                                <Tile color={'#8B5CF6'} handlePress={() => null} size={20} />
+                            </View>
+                            <Text style={styles.headerTextStyle}>habits</Text>
+                        </View>
+
                         <NewButton handlePress={() => navigation.navigate('Habits')} />
                     </View>
 
@@ -56,7 +65,14 @@ function HomeScreen({ navigation }): JSX.Element {
 
 const styles = StyleSheet.create({
     textStyle: {
-        color: '#fff'
+        color: '#fff',
+        fontFamily: 'Inter-Medium',
+        fontSize: 20
+    },
+    headerTextStyle: {
+        color: '#fff',
+        fontFamily: 'Inter-ExtraBold',
+        fontSize: 32
     },
     headerContainer: {
         display: 'flex',
@@ -75,6 +91,11 @@ const styles = StyleSheet.create({
     calendarColumnContainer: {
         display: 'flex',
         flexDirection: 'column'
+    },
+    headerTiles: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 2
     }
 });
 
