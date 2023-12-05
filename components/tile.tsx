@@ -26,8 +26,8 @@ function Tile({ color, handlePress, size = 40, isToday = false }: TileProps): JS
 const styles = StyleSheet.create({
   tile: {
     borderRadius: 4,
-    marginBottom: 5,
-    marginRight: 5
+    marginBottom: 8,
+    marginRight: 8
   }
 });
 

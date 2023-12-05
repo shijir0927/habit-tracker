@@ -20,7 +20,7 @@ function HomeScreen({ navigation }): JSX.Element {
     };
     const screenWidth = Dimensions.get("window").width;
     const numOfColumns = 7;
-    const tileSize = (screenWidth - 64 - 35) / numOfColumns;
+    const tileSize = (screenWidth - 64 - 56) / numOfColumns;
 
     const today = new Date();
 
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     calendarDayWrapper: {
-        marginRight: 5,
+        marginRight: 8,
         marginBottom: 12,
         display: 'flex',
         alignItems: 'center',
