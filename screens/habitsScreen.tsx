@@ -10,13 +10,23 @@ import {
     Pressable
 } from 'react-native';
 import { PageContainer } from '../components'
+import firestore from '@react-native-firebase/firestore';
 
 function HabitsScreen(): JSX.Element {
     const backgroundStyle = {
         backgroundColor: '#000',
     };
-
     const [newHabit, setNewHabit] = useState('');
+
+    const ref = firestore().collection('habits');
+
+    async function addHabit() {
+        await ref.add({
+            title: newHabit,
+            complete: false,
+        });
+        setNewHabit('');
+    }
 
     return (
         <SafeAreaView style={backgroundStyle}>
@@ -34,7 +44,7 @@ function HabitsScreen(): JSX.Element {
                             placeholder="Add a new habit"
                             placeholderTextColor='#A1A1AA'
                         />
-                        <Pressable style={styles.buttonStyle} onPress={() => Alert.alert(newHabit)}>
+                        <Pressable style={styles.buttonStyle} onPress={() => addHabit()}>
                             <Text style={styles.buttonTextStyle}>Add</Text>
                         </Pressable>
                     </View>
