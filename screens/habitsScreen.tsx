@@ -43,6 +43,7 @@ function HabitsScreen(): JSX.Element {
                             onChangeText={text => setNewHabit(text)}
                             placeholder="Add a new habit"
                             placeholderTextColor='#A1A1AA'
+                            value={newHabit}
                         />
                         <Pressable style={styles.buttonStyle} onPress={() => addHabit()}>
                             <Text style={styles.buttonTextStyle}>Add</Text>

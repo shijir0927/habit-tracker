@@ -54,12 +54,25 @@ function HomeScreen({ navigation }): JSX.Element {
         for (let i = 1; i <= getNumberOfDays(year, month - 1); i++) {
             data.push({ year: year, month: month, day: i })
         }
+
+        let firstWeekday = calendar().of(year, month - 1).firstWeekday
+
+        for (let i = 1; i < firstWeekday; i++) {
+            data.unshift({ year: 0, month: 0, day: 0 })
+        }
+
         return data;
     }
 
     const renderItem = ({ item }) => {
+        let color = '#A78BFA';
+
+        if (item.year == 0 && item.month == 0 && item.day == 0) {
+            color = '#18181B';
+        }
+
         return (
-            <Tile color={'#A78BFA'}
+            <Tile color={color}
                 size={tileSize}
                 isToday={today.getFullYear() == item.year && today.getMonth() + 1 == item.month && today.getDate() == item.day}
                 handlePress={() => navigation.navigate('Day', {
