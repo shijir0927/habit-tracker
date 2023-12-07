@@ -7,18 +7,59 @@ import {
     Text,
     View,
     FlatList,
-    Pressable
+    Pressable,
+    Alert
 } from 'react-native';
 import { Tile, NewButton, PageContainer } from '../components'
 import firestore from '@react-native-firebase/firestore';
 import CheckBox from '@react-native-community/checkbox';
 
-function DayHabit({ title }): JSX.Element {
-
+function DayHabit({ title, year, month, day }): JSX.Element {
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
 
-    function handleTogglePress(newValue) {
+    const daysRef = firestore().collection('days');
+
+    async function createOrUpdateDay(newValue: boolean) {
+        const dayData = await daysRef
+            .where('year', '==', year)
+            .get().then(snapshot => {
+                // The snapshot returned by `where().get()` does not have a `data()` reference since it returns multiple documents, it has `docs` property which is an array of all the documents matched
+                snapshot.docs.forEach(doc => {
+                    const docData = { ...doc.data(), id: doc.id };
+                    console.log(docData);
+                })
+            })
+        // Alert.alert("data", JSON.stringify(dayData))
+
+        // await daysRef.add({
+        //     title: title,
+        //     complete: newValue,
+        //     year: year,
+        //     month: month,
+        //     day: day
+        // });
+    }
+
+    async function updateDay(newValue: boolean) {
+        await daysRef.add({
+            title: title,
+            complete: newValue,
+            year: year,
+            month: month,
+            day: day
+        });
+    }
+
+    function handleTogglePress(newValue: boolean) {
+        createOrUpdateDay(newValue)
         setToggleCheckBox(newValue);
+        // if (newValue == true) {
+        //     createOrUpdateDay(newValue)
+        //     setToggleCheckBox(newValue);
+        // } else if (newValue == false) {
+        //     updateDay(newValue)
+        //     setToggleCheckBox(newValue);
+        // }
     }
 
     return (
@@ -56,14 +97,6 @@ function DayScreen({ route, navigation }): JSX.Element {
 
     const habitRef = firestore().collection('habits');
 
-    // async function addHabit() {
-    //     await ref.add({
-    //         title: newHabit,
-    //         complete: false,
-    //     });
-    //     setNewHabit('');
-    // }
-
     useEffect(() => {
         return habitRef.onSnapshot(querySnapshot => {
             const list = [];
@@ -100,7 +133,7 @@ function DayScreen({ route, navigation }): JSX.Element {
                             style={{}}
                             data={habits}
                             keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => <DayHabit title={item.title} />}
+                            renderItem={({ item }) => <DayHabit title={item.title} year={year} month={month} day={day} />}
                         />
                     </View>
                 </View>
