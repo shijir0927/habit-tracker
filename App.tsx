@@ -24,7 +24,13 @@ function App(): JSX.Element {
           },
           headerTintColor: '#fff'
         }} />
-        <Stack.Screen name="Day" component={DayScreen} />
+        <Stack.Screen name="Day" component={DayScreen} options={{
+          title: '',
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+          headerTintColor: '#fff'
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
