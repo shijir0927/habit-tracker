@@ -110,11 +110,7 @@ function SignInScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     body: {
-        backgroundColor: 'black',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+
     },
     logo: {
         color: 'white',

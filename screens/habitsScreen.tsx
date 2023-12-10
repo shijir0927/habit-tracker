@@ -13,7 +13,8 @@ import {
 import { PageContainer, Habit } from '../components'
 import firestore from '@react-native-firebase/firestore';
 
-function HabitsScreen(): JSX.Element {
+function HabitsScreen({ route, navigation }): JSX.Element {
+    const { userId } = route.params;
     const backgroundStyle = {
         backgroundColor: '#000',
     };
@@ -26,28 +27,31 @@ function HabitsScreen(): JSX.Element {
     async function addHabit() {
         await ref.add({
             title: newHabit,
-            complete: false,
+            userId: userId
         });
         setNewHabit('');
     }
 
     useEffect(() => {
-        return ref.onSnapshot(querySnapshot => {
-            const list = [];
-            querySnapshot.forEach(doc => {
-                const { title } = doc.data();
-                list.push({
-                    id: doc.id,
-                    title: title
+        ref
+            .where('userId', '==', userId.toString())
+            .get()
+            .then(querySnapshot => {
+                const list = [];
+                querySnapshot.forEach(doc => {
+                    const { title } = doc.data();
+                    list.push({
+                        id: doc.id,
+                        title: title
+                    });
                 });
+
+                setHabits(list);
+
+                if (loading) {
+                    setLoading(false);
+                }
             });
-
-            setHabits(list);
-
-            if (loading) {
-                setLoading(false);
-            }
-        });
     }, []);
 
     return (

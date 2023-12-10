@@ -88,7 +88,7 @@ function ProgressBar({ progress }): JSX.Element {
 }
 
 function DayScreen({ route, navigation }): JSX.Element {
-    const { year, month, day } = route.params;
+    const { year, month, day, userId } = route.params;
     const backgroundStyle = {
         backgroundColor: '#000',
     };
@@ -98,29 +98,21 @@ function DayScreen({ route, navigation }): JSX.Element {
     const habitRef = firestore().collection('habits');
 
     useEffect(() => {
-        return habitRef.onSnapshot(querySnapshot => {
-            const list = [];
-            querySnapshot.forEach(doc => {
-                const { title } = doc.data();
-                list.push({
-                    id: doc.id,
-                    title: title
+        habitRef
+            .where('userId', '==', userId.toString())
+            .get().then(querySnapshot => {
+                const list = [];
+                querySnapshot.forEach(doc => {
+                    const { title } = doc.data();
+                    list.push({
+                        id: doc.id,
+                        title: title
+                    });
                 });
+
+                setHabits(list);
             });
-
-            setHabits(list);
-        });
     }, []);
-
-    // async function deleteHabit() {
-    //     await firestore()
-    //         .collection('habits')
-    //         .doc(id)
-    //         .delete()
-    //         .then(() => {
-    //             console.log('Habit deleted!');
-    //         });
-    // }
 
     return (
         <SafeAreaView style={backgroundStyle}>
