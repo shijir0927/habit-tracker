@@ -9,12 +9,19 @@ import {
     Pressable,
     Alert,
     FlatList,
-    Dimensions
+    Dimensions,
+    Button
 } from 'react-native';
 import calendar from 'calendar-js';
 import { Tile, NewButton, PageContainer } from '../components'
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
 
-function HomeScreen({ navigation }): JSX.Element {
+function HomeScreen({ navigation, handleSignOutPress }): JSX.Element {
     const backgroundStyle = {
         backgroundColor: '#000',
     };
@@ -85,8 +92,21 @@ function HomeScreen({ navigation }): JSX.Element {
 
     const DAYS = ["M", "T", "W", "T", "F", "S", "S"];
 
+    const signOut = async () => {
+        try {
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut();
+            auth()
+                .signOut()
+                .then(() => Alert.alert('Your are signed out!'));
+            handleSignOutPress();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
-        <SafeAreaView style={backgroundStyle}>
+        <>
             <StatusBar
                 barStyle={'light-content'}
                 backgroundColor={backgroundStyle.backgroundColor}
@@ -103,6 +123,11 @@ function HomeScreen({ navigation }): JSX.Element {
                             <Tile color={'#8B5CF6'} handlePress={() => null} size={20} />
                         </View>
                         <Text style={styles.headerTextStyle}>habits</Text>
+                        <Button
+                            onPress={() => signOut()}
+                            title="LogOut"
+                            color="red"
+                        />
                     </View>
 
                     <NewButton handlePress={() => navigation.navigate('Habits')} />
@@ -138,7 +163,7 @@ function HomeScreen({ navigation }): JSX.Element {
                     </View>
                 </View>
             </PageContainer>
-        </SafeAreaView >
+        </>
     );
 }
 
@@ -158,11 +183,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 16
+        marginBottom: 16,
     },
     calendarContainer: {
         display: 'flex',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
     },
     calendarNav: {
         display: 'flex',
@@ -170,7 +195,7 @@ const styles = StyleSheet.create({
         gap: 8
     },
     calendarWrapper: {
-        marginTop: 24
+        marginTop: 24,
     },
     headerTiles: {
         display: 'flex',

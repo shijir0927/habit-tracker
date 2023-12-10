@@ -20,11 +20,13 @@ import {
     statusCodes,
 } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import HomeScreen from './homeScreen';
 
 
 function SignInScreen(): JSX.Element {
     const backgroundStyle = {
         backgroundColor: '#000',
+        height: '100%'
     };
 
     const [loggedIn, setLoggedIn] = useState(false);
@@ -65,19 +67,10 @@ function SignInScreen(): JSX.Element {
         }
     };
 
-    const signOut = async () => {
-        try {
-            await GoogleSignin.revokeAccess();
-            await GoogleSignin.signOut();
-            auth()
-                .signOut()
-                .then(() => Alert.alert('Your are signed out!'));
-            setLoggedIn(false);
-            setUserInfo([]);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    const handleSignOutPress = () => {
+        setLoggedIn(false);
+        setUserInfo([]);
+    }
 
     useEffect(() => {
         GoogleSignin.configure({
@@ -89,13 +82,12 @@ function SignInScreen(): JSX.Element {
 
     return (
         <>
-            <StatusBar barStyle="dark-content" />
-            <SafeAreaView>
-                <ScrollView
-                    contentInsetAdjustmentBehavior="automatic"
-                    style={{}}>
-                    <View style={styles.body}>
+            <StatusBar barStyle="light-content" />
+            <SafeAreaView style={backgroundStyle}>
+                <View style={styles.body}>
+                    {!loggedIn && (<>
                         <View style={styles.sectionContainer}>
+                            <Text style={styles.logo}>Habits</Text>
                             <GoogleSigninButton
                                 style={{ width: 192, height: 48 }}
                                 size={GoogleSigninButton.Size.Wide}
@@ -103,21 +95,14 @@ function SignInScreen(): JSX.Element {
                                 onPress={() => signIn()}
                             />
                         </View>
-                        <View style={styles.buttonContainer}>
-                            {!loggedIn && <Text>You are currently logged out</Text>}
-                            {loggedIn && (
-                                <>
-                                    <Text> Hi {userInfo.name}!</Text>
-                                    <Button
-                                        onPress={() => signOut()}
-                                        title="LogOut"
-                                        color="red"></Button>
-                                </>
+                    </>)}
+                    {loggedIn && (
+                        <>
+                            <HomeScreen handleSignOutPress={() => handleSignOutPress()} />
+                        </>
 
-                            )}
-                        </View>
-                    </View>
-                </ScrollView>
+                    )}
+                </View>
             </SafeAreaView>
         </>
     );
@@ -125,13 +110,18 @@ function SignInScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
     body: {
-
+        backgroundColor: 'black',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
-    sectionContainer: {
-
-    },
-    buttonContainer: {
-
+    logo: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 32,
+        fontWeight: '700',
+        marginBottom: 24
     }
 });
 
