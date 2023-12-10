@@ -90,18 +90,37 @@ function DayScreen({ route, navigation }): JSX.Element {
     const [completedHabitsCount, setCompletedHabitsCount] = useState(0);
 
     const habitRef = firestore().collection('habits');
+    const dayRef = firestore().collection('days');
+
+    const getCompletedResult = (title: string) => {
+        var completed = false;
+        dayRef.where('userId', '==', userId)
+            .where('title', '==', title)
+            .where('year', '==', year)
+            .where('month', '==', month)
+            .where('day', '==', day)
+            .get().then(querySnapshot => {
+                // console.log(querySnapshot.docs[0].data().completed)
+                completed = querySnapshot.docs[0].data().completed
+            });
+
+        return completed
+    }
 
     useEffect(() => {
         habitRef
-            .where('userId', '==', userId.toString())
+            .where('userId', '==', userId)
             .get().then(querySnapshot => {
                 const list = [];
                 querySnapshot.forEach(doc => {
                     const { title } = doc.data();
+
+                    const completed = getCompletedResult(title);
+                    console.log(completed)
                     list.push({
                         id: doc.id,
                         title: title,
-                        completed: true
+                        completed: false
                     });
                 });
 
