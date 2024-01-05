@@ -75,12 +75,25 @@ function HomeScreen({ navigation }): JSX.Element {
         return data;
     }
 
-    const renderItem = ({ item }) => {
+    const calculateColor = (item) => {
+        let COLOR_MAP = {
+            "0": "#18181B",
+            "20": "4C1D95"
+        }
         let color = '#A78BFA';
 
         if (item.year == 0 && item.month == 0 && item.day == 0) {
             color = '#18181B';
+        } else {
+            let percentage_of_completed_habits = 0
+            color = 'blue'
         }
+
+        return color;
+    }
+
+    const renderItem = ({ item }) => {
+        let color = calculateColor(item)
 
         return (
             <Tile color={color}
