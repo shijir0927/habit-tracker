@@ -20,6 +20,8 @@ import {
     statusCodes,
 } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+
 
 function HomeScreen({ navigation }): JSX.Element {
     const backgroundStyle = {
@@ -37,6 +39,9 @@ function HomeScreen({ navigation }): JSX.Element {
     const [year, setYear] = useState(today.getFullYear())
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({});
+
+    const dayRef = firestore().collection('days');
+
 
     const handlePrevMonth = () => {
         if (month == 1) {
@@ -75,18 +80,49 @@ function HomeScreen({ navigation }): JSX.Element {
         return data;
     }
 
+    const get_percentage_of_completed_habits = (item) => {
+        let percent = 0;
+        dayRef.where('userId', '==', userInfo.id)
+            .where('year', '==', item.year)
+            .where('month', '==', item.month)
+            .where('day', '==', item.day)
+            .get().then(querySnapshot => {
+                console.log("RESULTS: ", (querySnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length / 10) * 100)
+                // completed = querySnapshot.docs[0].data().completed
+                percent = (querySnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length / 10) * 100
+            });
+
+        return percent;
+    }
+
     const calculateColor = (item) => {
         let COLOR_MAP = {
             "0": "#18181B",
-            "20": "4C1D95"
+            "20": "#4C1D95",
+            "40": "#5B21B6",
+            "60": "#6D28D9",
+            "80": "#7C3AED",
+            "100": "#8B5CF6"
         }
-        let color = '#A78BFA';
+        let color = '#18181B';
 
         if (item.year == 0 && item.month == 0 && item.day == 0) {
             color = '#18181B';
         } else {
-            let percentage_of_completed_habits = 0
-            color = 'blue'
+            let percentage_of_completed_habits = get_percentage_of_completed_habits(item);
+
+            if (percentage_of_completed_habits > 0 && percentage_of_completed_habits < 20) {
+                percentage_of_completed_habits = 20;
+            } else if (percentage_of_completed_habits > 20 && percentage_of_completed_habits < 40) {
+                percentage_of_completed_habits = 40;
+            } else if (percentage_of_completed_habits > 40 && percentage_of_completed_habits < 60) {
+                percentage_of_completed_habits = 60;
+            } else if (percentage_of_completed_habits > 60 && percentage_of_completed_habits < 80) {
+                percentage_of_completed_habits = 80;
+            } else if (percentage_of_completed_habits > 80) {
+                percentage_of_completed_habits = 100;
+            }
+            color = COLOR_MAP[percentage_of_completed_habits]
         }
 
         return color;
