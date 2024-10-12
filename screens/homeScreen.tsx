@@ -243,9 +243,6 @@ function HomeScreen({ navigation }): JSX.Element {
                     <>
                         <View style={styles.headerContainer}>
                             <View>
-                                <View>
-                                    <Text style={{ color: 'white' }}>UserID: {userInfo.id}</Text>
-                                </View>
                                 <View style={styles.headerTiles}>
                                     <Tile color={'#18181B'} handlePress={() => null} size={20} />
                                     <Tile color={'#4C1D95'} handlePress={() => null} size={20} />
