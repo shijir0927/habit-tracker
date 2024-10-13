@@ -80,7 +80,6 @@ function HomeScreen({ navigation }): JSX.Element {
         for (let i = 1; i < firstWeekday; i++) {
             data.unshift({ year: 0, month: 0, day: 0 })
         }
-        console.log(data);
         setCalendarData(data)
         setIsLoading(false);
         return data;
@@ -96,22 +95,20 @@ function HomeScreen({ navigation }): JSX.Element {
                 .get()
 
             if (daysSnapshot.docs !== undefined && daysSnapshot.docs.length > 0) {
-                // console.log(daysSnapshot.docs);
-                percent = (daysSnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length / 10) * 100
+                percent = (daysSnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length * 100) / 10
             }
-            resolve(percent);
-
+            resolve(percent)
         });
     }
 
     const calculateColor = async (item) => {
         let COLOR_MAP = {
             "0": "#18181B",
-            "20": "#4C1D95",
-            "40": "#5B21B6",
+            "100": "#4C1D95",
+            "80": "#5B21B6",
             "60": "#6D28D9",
-            "80": "#7C3AED",
-            "100": "#8B5CF6"
+            "40": "#7C3AED",
+            "20": "#8B5CF6"
         }
         let color = '#18181B';
 
@@ -131,8 +128,6 @@ function HomeScreen({ navigation }): JSX.Element {
                 percentage_of_completed_habits = 100;
             }
             color = COLOR_MAP[percentage_of_completed_habits]
-            // console.log(`${item.month} |  ${item.day} has percentage of ${percentage_of_completed_habits}% and the color is: ${color}`);
-
         }
 
         return color
@@ -221,7 +216,7 @@ function HomeScreen({ navigation }): JSX.Element {
 
         getCurrentUserInfo();
         getCalendarData();
-    }, []);
+    }, [year, month]);
 
     return (
         <>
