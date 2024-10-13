@@ -274,7 +274,7 @@ function HomeScreen({ navigation }): JSX.Element {
                                         )
                                     })}
                                 </View>
-                                {isLoading && <View><Text>Loading....</Text></View>}
+                                {isLoading && <View><Text style={styles.textStyle}>Loading....</Text></View>}
                                 {!isLoading && calendarData && (
                                     <FlatList
                                         data={calendarData}
