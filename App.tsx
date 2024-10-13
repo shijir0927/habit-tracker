@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen, DayScreen, HabitsScreen, SignInScreen, SettingsScreen } from './screens';
+import { TabBar } from './components'
 
 const HomeStack = createNativeStackNavigator();
 
@@ -47,7 +48,13 @@ const SettingsStack = createNativeStackNavigator();
 function SettingsStackScreen() {
   return (
     <SettingsStack.Navigator initialRouteName='Settings'>
-      <SettingsStack.Screen name="Settings" component={SettingsScreen} />
+      <SettingsStack.Screen name="Settings" component={SettingsScreen} options={{
+        title: '',
+        headerStyle: {
+          backgroundColor: '#000'
+        },
+        headerTintColor: '#fff'
+      }} />
     </SettingsStack.Navigator>
   );
 }
@@ -57,9 +64,13 @@ const Tab = createBottomTabNavigator();
 function App(): JSX.Element {
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen name="HomeStack" component={HomeStackScreen} />
-        <Tab.Screen name="SettingsStack" component={SettingsStackScreen} />
+      <Tab.Navigator screenOptions={{ headerShown: false, tabBarActiveTintColor: '#8B5CF6', tabBarStyle: { backgroundColor: '#000' } }}>
+        <Tab.Screen name="HomeStack" options={{
+          tabBarLabel: 'Home'
+        }} component={HomeStackScreen} />
+        <Tab.Screen name="SettingsStack" options={{
+          tabBarLabel: 'Settings'
+        }} component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
