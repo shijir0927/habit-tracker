@@ -1,4 +1,4 @@
-import React, { Children, useState, useEffect } from 'react';
+import React, { Children, useState, useEffect, useCallback } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -13,6 +13,12 @@ import {
 import { Tile, NewButton, PageContainer } from '../components'
 import firestore from '@react-native-firebase/firestore';
 import CheckBox from '@react-native-community/checkbox';
+
+type habitType = {
+    id: string,
+    title: string,
+    completed: boolean
+}
 
 function DayHabit({ title, year, month, day, userId, completed, handleProgressBar }): JSX.Element {
     const [toggleCheckBox, setToggleCheckBox] = useState(completed)
@@ -90,49 +96,51 @@ function DayScreen({ route, navigation }): JSX.Element {
     const [completedHabitsCount, setCompletedHabitsCount] = useState(0);
 
     const habitRef = firestore().collection('habits');
-    const dayRef = firestore().collection('days');
+    const daysRef = firestore().collection('days');
 
-    const getCompletedResult = (title: string) => {
+    const getCompletedResult = async (title: string) => {
         var completed = false;
-        dayRef.where('userId', '==', userId)
+        const daysSnapshot = await daysRef.where('userId', '==', userId)
             .where('title', '==', title)
             .where('year', '==', year)
             .where('month', '==', month)
             .where('day', '==', day)
-            .get().then(querySnapshot => {
-                // console.log(querySnapshot.docs[0].data().completed)
-                completed = querySnapshot.docs[0].data().completed
-            });
+            .get()
 
-        return completed
+        if (daysSnapshot.docs[0] !== undefined) {
+            completed = daysSnapshot.docs[0].data().completed
+        }
+
+        return completed;
     }
 
-    useEffect(() => {
-        habitRef
-            .where('userId', '==', userId)
-            .get().then(querySnapshot => {
-                const list = [];
-                querySnapshot.forEach(doc => {
-                    const { title } = doc.data();
+    const setHabitsData = useCallback(async () => {
+        const habitsSnapshot = await habitRef.where('userId', '==', userId).get();
+        const list: habitType[] = [];
 
-                    const completed = getCompletedResult(title);
-                    console.log(completed)
-                    list.push({
-                        id: doc.id,
-                        title: title,
-                        completed: false
-                    });
-                });
+        for (const doc of habitsSnapshot.docs) {
+            const { title } = doc.data();
+            const completed = await getCompletedResult(title);
 
-                setHabits(list);
-                let allHabitsCount = list.length;
-                let completedHabitsCount = list.filter((item) => item.completed == true).length
-                let initialProgress = (completedHabitsCount / allHabitsCount) * 100;
-                setAllHabitsCount(allHabitsCount);
-                setCompletedHabitsCount(completedHabitsCount);
-                setProgress(initialProgress);
+            list.push({
+                id: doc.id,
+                title: title,
+                completed: completed
             });
-    }, []);
+        }
+
+        setHabits(list);
+        let allHabitsCount = list.length;
+        let completedHabitsCount = list.filter((item) => item.completed == true).length
+        let initialProgress = (completedHabitsCount / allHabitsCount) * 100;
+        setAllHabitsCount(allHabitsCount);
+        setCompletedHabitsCount(completedHabitsCount);
+        setProgress(initialProgress);
+    }, [userId])
+
+    useEffect(() => {
+        setHabitsData();
+    }, [setHabitsData]);
 
     const handleProgressBar = (newValue) => {
         if (newValue == true) {
