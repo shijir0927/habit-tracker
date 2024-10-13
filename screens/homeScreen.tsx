@@ -87,7 +87,6 @@ function HomeScreen({ navigation }): JSX.Element {
             .where('month', '==', item.month)
             .where('day', '==', item.day)
             .get().then(querySnapshot => {
-                console.log("RESULTS: ", (querySnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length / 10) * 100)
                 // completed = querySnapshot.docs[0].data().completed
                 percent = (querySnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length / 10) * 100
             });
@@ -146,22 +145,16 @@ function HomeScreen({ navigation }): JSX.Element {
 
     const signIn = async () => {
         try {
-            console.log("here");
             await GoogleSignin.hasPlayServices();
-            console.log("here1");
             const response = await GoogleSignin.signIn();
             const { accessToken, idToken, user } = response;
-            console.log("response: ", response);
             setUserInfo(user);
             setLoggedIn(true);
-            console.log("here3");
             const credential = auth.GoogleAuthProvider.credential(
                 idToken,
                 accessToken,
             );
-            console.log("here4");
             await auth().signInWithCredential(credential);
-            console.log("here5");
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
@@ -196,7 +189,6 @@ function HomeScreen({ navigation }): JSX.Element {
     const getCurrentUserInfo = async () => {
         try {
             const userInfo = await GoogleSignin.signInSilently()
-            console.log("User info: ", userInfo.user)
             setUserInfo(userInfo.user)
             setLoggedIn(true)
         } catch (error) {
