@@ -39,6 +39,8 @@ function HomeScreen({ navigation }): JSX.Element {
     const [year, setYear] = useState(today.getFullYear())
     const [loggedIn, setLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+    const [calendarData, setCalendarData] = useState([]);
 
     const dayRef = firestore().collection('days');
 
@@ -65,10 +67,12 @@ function HomeScreen({ navigation }): JSX.Element {
         return calendar().of(year, month).days
     }
 
-    const getCalendarData = () => {
+    const getCalendarData = async () => {
+        setIsLoading(true);
         let data = [];
         for (let i = 1; i <= getNumberOfDays(year, month - 1); i++) {
-            data.push({ year: year, month: month, day: i })
+            let color = await calculateColor({ year: year, month: month, day: i })
+            data.push({ year: year, month: month, day: i, color: color })
         }
 
         let firstWeekday = calendar().of(year, month - 1).firstWeekday
@@ -76,25 +80,31 @@ function HomeScreen({ navigation }): JSX.Element {
         for (let i = 1; i < firstWeekday; i++) {
             data.unshift({ year: 0, month: 0, day: 0 })
         }
-
+        console.log(data);
+        setCalendarData(data)
+        setIsLoading(false);
         return data;
     }
 
-    const get_percentage_of_completed_habits = (item) => {
-        let percent = 0;
-        dayRef.where('userId', '==', userInfo.id)
-            .where('year', '==', item.year)
-            .where('month', '==', item.month)
-            .where('day', '==', item.day)
-            .get().then(querySnapshot => {
-                // completed = querySnapshot.docs[0].data().completed
-                percent = (querySnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length / 10) * 100
-            });
+    const get_percentage_of_completed_habits = async (item) => {
+        return new Promise<number>(async (resolve, reject) => {
+            let percent = 0;
+            const daysSnapshot = await dayRef.where('userId', '==', userInfo.id)
+                .where('year', '==', item.year)
+                .where('month', '==', item.month)
+                .where('day', '==', item.day)
+                .get()
 
-        return percent;
+            if (daysSnapshot.docs !== undefined && daysSnapshot.docs.length > 0) {
+                // console.log(daysSnapshot.docs);
+                percent = (daysSnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length / 10) * 100
+            }
+            resolve(percent);
+
+        });
     }
 
-    const calculateColor = (item) => {
+    const calculateColor = async (item) => {
         let COLOR_MAP = {
             "0": "#18181B",
             "20": "#4C1D95",
@@ -108,8 +118,7 @@ function HomeScreen({ navigation }): JSX.Element {
         if (item.year == 0 && item.month == 0 && item.day == 0) {
             color = '#18181B';
         } else {
-            let percentage_of_completed_habits = get_percentage_of_completed_habits(item);
-
+            let percentage_of_completed_habits = await get_percentage_of_completed_habits(item);
             if (percentage_of_completed_habits > 0 && percentage_of_completed_habits < 20) {
                 percentage_of_completed_habits = 20;
             } else if (percentage_of_completed_habits > 20 && percentage_of_completed_habits < 40) {
@@ -122,16 +131,16 @@ function HomeScreen({ navigation }): JSX.Element {
                 percentage_of_completed_habits = 100;
             }
             color = COLOR_MAP[percentage_of_completed_habits]
+            // console.log(`${item.month} |  ${item.day} has percentage of ${percentage_of_completed_habits}% and the color is: ${color}`);
+
         }
 
-        return color;
+        return color
     }
 
     const renderItem = ({ item }) => {
-        let color = calculateColor(item)
-
         return (
-            <Tile color={color}
+            <Tile color={item.color}
                 size={tileSize}
                 isToday={today.getFullYear() == item.year && today.getMonth() + 1 == item.month && today.getDate() == item.day}
                 handlePress={() => navigation.navigate('Day', {
@@ -211,6 +220,7 @@ function HomeScreen({ navigation }): JSX.Element {
         });
 
         getCurrentUserInfo();
+        getCalendarData();
     }, []);
 
     return (
@@ -269,14 +279,18 @@ function HomeScreen({ navigation }): JSX.Element {
                                         )
                                     })}
                                 </View>
-                                <FlatList
-                                    data={getCalendarData()}
-                                    renderItem={renderItem}
-                                    keyExtractor={item => item.day}
-                                    numColumns={7}
-                                    key={7}
-                                    style={styles.calenderFlatListContainer}
-                                />
+                                {isLoading && <View><Text>Loading....</Text></View>}
+                                {!isLoading && calendarData && (
+                                    <FlatList
+                                        data={calendarData}
+                                        renderItem={renderItem}
+                                        keyExtractor={item => item.day}
+                                        numColumns={7}
+                                        key={7}
+                                        style={styles.calenderFlatListContainer}
+                                    />
+                                )}
+
                             </View>
                         </View>
                         <View style={styles.logOutContainer}>
