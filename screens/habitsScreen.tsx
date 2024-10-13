@@ -52,7 +52,7 @@ function HabitsScreen({ route, navigation }): JSX.Element {
                     setLoading(false);
                 }
             });
-    }, []);
+    }, [habits]);
 
     return (
         <SafeAreaView style={backgroundStyle}>

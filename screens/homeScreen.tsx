@@ -244,11 +244,6 @@ function HomeScreen({ navigation }): JSX.Element {
                                     <Tile color={'#8B5CF6'} handlePress={() => null} size={20} />
                                 </View>
                                 <Text style={styles.headerTextStyle}>habits</Text>
-                                <Button
-                                    onPress={() => signOut()}
-                                    title="LogOut"
-                                    color="red"
-                                />
                             </View>
 
                             <NewButton handlePress={() => navigation.navigate('Habits', { userId: userInfo.id })} />
@@ -280,8 +275,16 @@ function HomeScreen({ navigation }): JSX.Element {
                                     keyExtractor={item => item.day}
                                     numColumns={7}
                                     key={7}
+                                    style={styles.calenderFlatListContainer}
                                 />
                             </View>
+                        </View>
+                        <View style={styles.logOutContainer}>
+                            <Button
+                                onPress={() => signOut()}
+                                title="Log Out"
+                                color="red"
+                            />
                         </View>
                     </>
 
@@ -355,6 +358,12 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    calenderFlatListContainer: {
+        flexGrow: 0
+    },
+    logOutContainer: {
+        marginTop: 24
     }
 });
 
