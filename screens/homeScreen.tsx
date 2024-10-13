@@ -21,7 +21,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
+import COLOR_MAP from '../constants/color_map';
 
 function HomeScreen({ navigation }): JSX.Element {
     const backgroundStyle = {
@@ -43,7 +43,6 @@ function HomeScreen({ navigation }): JSX.Element {
     const [calendarData, setCalendarData] = useState([]);
 
     const dayRef = firestore().collection('days');
-
 
     const handlePrevMonth = () => {
         if (month == 1) {
@@ -102,19 +101,9 @@ function HomeScreen({ navigation }): JSX.Element {
     }
 
     const calculateColor = async (item) => {
-        let COLOR_MAP = {
-            "0": "#18181B",
-            "100": "#4C1D95",
-            "80": "#5B21B6",
-            "60": "#6D28D9",
-            "40": "#7C3AED",
-            "20": "#8B5CF6"
-        }
-        let color = '#18181B';
+        let color = COLOR_MAP["0"]
 
-        if (item.year == 0 && item.month == 0 && item.day == 0) {
-            color = '#18181B';
-        } else {
+        if (item.year != 0 && item.month != 0 && item.day != 0) {
             let percentage_of_completed_habits = await get_percentage_of_completed_habits(item);
             if (percentage_of_completed_habits > 0 && percentage_of_completed_habits < 20) {
                 percentage_of_completed_habits = 20;
@@ -209,7 +198,7 @@ function HomeScreen({ navigation }): JSX.Element {
 
     useEffect(() => {
         GoogleSignin.configure({
-            webClientId:
+            webClientId://TODO move this to .env file
                 '985723193964-0iqbolfe82pkudeedm0k986mc6v7c4tj.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
             offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
         });
