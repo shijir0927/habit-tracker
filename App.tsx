@@ -65,7 +65,12 @@ const Tab = createBottomTabNavigator();
 function App(): JSX.Element {
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{ headerShown: false, tabBarActiveTintColor: '#8B5CF6', tabBarStyle: { backgroundColor: '#000' } }}>
+      <Tab.Navigator screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: '#8B5CF6',
+        tabBarStyle: { backgroundColor: '#000' },
+        tabBarShowLabel: false,
+      }}>
         <Tab.Screen name="HomeStack" options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (

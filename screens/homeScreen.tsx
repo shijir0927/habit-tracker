@@ -167,13 +167,25 @@ function HomeScreen({ navigation }): JSX.Element {
         }
     };
 
+    const handleLogOutPress = () => {
+        Alert.alert(
+            'Are you sure you want to log out?',
+            '',
+            [
+                { text: 'Yes', onPress: () => signOut() },
+                { text: 'No', onPress: () => console.log('No pressed') }
+            ],
+            { cancelable: false },
+        );
+    }
+
     const signOut = async () => {
         try {
             await GoogleSignin.revokeAccess();
             await GoogleSignin.signOut();
             auth()
                 .signOut()
-                .then(() => Alert.alert('Your are signed out!'));
+                .then(() => console.log('Your are signed out!'));
             setLoggedIn(false);
             setUserInfo({});
         } catch (error) {
@@ -280,11 +292,9 @@ function HomeScreen({ navigation }): JSX.Element {
                             </View>
                         </View>
                         <View style={styles.logOutContainer}>
-                            <Button
-                                onPress={() => signOut()}
-                                title="Log Out"
-                                color="red"
-                            />
+                            <TouchableOpacity onPress={() => handleLogOutPress()}>
+                                <AntDesignIcon name="logout" color={'red'} size={20} />
+                            </TouchableOpacity>
                         </View>
                     </>
 
@@ -363,7 +373,9 @@ const styles = StyleSheet.create({
         flexGrow: 0
     },
     logOutContainer: {
-        marginTop: 24
+        marginTop: 24,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 
