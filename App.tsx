@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen, DayScreen, HabitsScreen, SignInScreen, SettingsScreen } from './screens';
 import { TabBar } from './components'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 
 const HomeStack = createNativeStackNavigator();
 
@@ -66,10 +67,16 @@ function App(): JSX.Element {
     <NavigationContainer>
       <Tab.Navigator screenOptions={{ headerShown: false, tabBarActiveTintColor: '#8B5CF6', tabBarStyle: { backgroundColor: '#000' } }}>
         <Tab.Screen name="HomeStack" options={{
-          tabBarLabel: 'Home'
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <AntDesignIcon name="home" color={color} size={size} />
+          )
         }} component={HomeStackScreen} />
         <Tab.Screen name="SettingsStack" options={{
-          tabBarLabel: 'Settings'
+          tabBarLabel: 'Settings',
+          tabBarIcon: ({ color, size }) => (
+            <AntDesignIcon name="setting" color={color} size={size} />
+          )
         }} component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>

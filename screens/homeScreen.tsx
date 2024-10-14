@@ -10,7 +10,8 @@ import {
     Alert,
     FlatList,
     Dimensions,
-    Button
+    Button,
+    TouchableOpacity
 } from 'react-native';
 import calendar from 'calendar-js';
 import { Tile, NewButton, PageContainer } from '../components'
@@ -22,6 +23,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import COLOR_MAP from '../constants/color_map';
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 
 function HomeScreen({ navigation }): JSX.Element {
     const backgroundStyle = {
@@ -245,13 +247,13 @@ function HomeScreen({ navigation }): JSX.Element {
 
                         <View style={styles.calendarContainer}>
                             <View style={styles.calendarNav}>
-                                <Pressable onPress={() => handlePrevMonth()}>
-                                    <Text style={styles.textStyle}>{"<"}</Text>
-                                </Pressable>
-                                <Text style={styles.textStyle}>{month} {year}</Text>
-                                <Pressable onPress={() => handleNextMonth()}>
-                                    <Text style={styles.textStyle}>{">"}</Text>
-                                </Pressable>
+                                <TouchableOpacity onPress={() => handlePrevMonth()}>
+                                    <AntDesignIcon name="left" color={'#fff'} size={20} />
+                                </TouchableOpacity>
+                                <Text style={styles.textStyle}>{calendar().of(year, month - 1).month} {year} </Text>
+                                <TouchableOpacity onPress={() => handleNextMonth()}>
+                                    <AntDesignIcon name="right" color={'#fff'} size={20} />
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.calendarWrapper}>
                                 <View style={styles.calendarDayContainer}>
