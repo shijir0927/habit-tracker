@@ -70,7 +70,7 @@ function HabitsScreen({ route, navigation }): JSX.Element {
                     <TextInput
                         style={styles.inputStyle}
                         onChangeText={text => setNewHabit(text)}
-                        placeholder="Add a new habit"
+                        placeholder="What do you want to do everyday?"
                         placeholderTextColor='#A1A1AA'
                         value={newHabit}
                     />
@@ -95,7 +95,9 @@ const styles = StyleSheet.create({
     },
     buttonTextStyle: {
         color: '#fff',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontWeight: '600',
+        fontSize: 14
     },
     inputStyle: {
         borderColor: '#27272A',

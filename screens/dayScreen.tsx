@@ -70,6 +70,8 @@ function DayHabit({ title, year, month, day, userId, completed, handleProgressBa
                 animationDuration={0.2}
                 style={{ width: 24, height: 24, margin: 2 }}
                 lineWidth={3}
+                onCheckColor='#16A34A'
+                onTintColor='#16A34A'
             />
             <Text style={styles.textStyle}>{title}</Text>
         </View>
