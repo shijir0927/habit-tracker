@@ -20,8 +20,9 @@ const styles = StyleSheet.create({
         paddingLeft: 32,
         paddingRight: 32,
         paddingTop: 32,
+        paddingBottom: 32,
         height: windowHeight,
-        backgroundColor: 'black'
+        backgroundColor: '#000'
     },
     textStyle: {
         color: '#fff'

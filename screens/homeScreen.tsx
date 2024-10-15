@@ -215,9 +215,12 @@ function HomeScreen({ navigation }): JSX.Element {
             offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
         });
 
-        getCurrentUserInfo();
-        getCalendarData();
-    }, [year, month]);
+        if (!loggedIn) {
+            getCurrentUserInfo();
+        } else {
+            getCalendarData();
+        }
+    }, [year, month, loggedIn]);
 
     return (
         <>
@@ -236,55 +239,57 @@ function HomeScreen({ navigation }): JSX.Element {
                     </View>
                 </>)}
                 {loggedIn && (
-                    <>
-                        <View style={styles.headerContainer}>
-                            <View>
-                                <View style={styles.headerTiles}>
-                                    <Tile color={'#18181B'} handlePress={() => null} size={20} />
-                                    <Tile color={'#4C1D95'} handlePress={() => null} size={20} />
-                                    <Tile color={'#5B21B6'} handlePress={() => null} size={20} />
-                                    <Tile color={'#6D28D9'} handlePress={() => null} size={20} />
-                                    <Tile color={'#7C3AED'} handlePress={() => null} size={20} />
-                                    <Tile color={'#8B5CF6'} handlePress={() => null} size={20} />
+                    <View style={styles.wrapperStyle}>
+                        <View>
+                            <View style={styles.headerContainer}>
+                                <View>
+                                    <View style={styles.headerTiles}>
+                                        <Tile color={'#18181B'} handlePress={() => null} size={20} />
+                                        <Tile color={'#4C1D95'} handlePress={() => null} size={20} />
+                                        <Tile color={'#5B21B6'} handlePress={() => null} size={20} />
+                                        <Tile color={'#6D28D9'} handlePress={() => null} size={20} />
+                                        <Tile color={'#7C3AED'} handlePress={() => null} size={20} />
+                                        <Tile color={'#8B5CF6'} handlePress={() => null} size={20} />
+                                    </View>
+                                    <Text style={styles.headerTextStyle}>habits</Text>
                                 </View>
-                                <Text style={styles.headerTextStyle}>habits</Text>
+
+                                <NewButton handlePress={() => navigation.navigate('Habits', { userId: userInfo.id })} />
                             </View>
 
-                            <NewButton handlePress={() => navigation.navigate('Habits', { userId: userInfo.id })} />
-                        </View>
-
-                        <View style={styles.calendarContainer}>
-                            <View style={styles.calendarNav}>
-                                <TouchableOpacity onPress={() => handlePrevMonth()}>
-                                    <AntDesignIcon name="left" color={'#fff'} size={20} />
-                                </TouchableOpacity>
-                                <Text style={styles.textStyle}>{calendar().of(year, month - 1).month} {year} </Text>
-                                <TouchableOpacity onPress={() => handleNextMonth()}>
-                                    <AntDesignIcon name="right" color={'#fff'} size={20} />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.calendarWrapper}>
-                                <View style={styles.calendarDayContainer}>
-                                    {DAYS.map((day, index) => {
-                                        return (
-                                            <View key={index} style={{ width: tileSize, height: tileSize, ...styles.calendarDayWrapper }}>
-                                                <Text style={styles.calendarDay}>{day}</Text>
-                                            </View>
-                                        )
-                                    })}
+                            <View style={styles.calendarContainer}>
+                                <View style={styles.calendarNav}>
+                                    <TouchableOpacity onPress={() => handlePrevMonth()}>
+                                        <AntDesignIcon name="left" color={'#fff'} size={20} />
+                                    </TouchableOpacity>
+                                    <Text style={styles.textStyle}>{calendar().of(year, month - 1).month} {year} </Text>
+                                    <TouchableOpacity onPress={() => handleNextMonth()}>
+                                        <AntDesignIcon name="right" color={'#fff'} size={20} />
+                                    </TouchableOpacity>
                                 </View>
-                                {isLoading && <View><Text style={styles.textStyle}>Loading....</Text></View>}
-                                {!isLoading && calendarData && (
-                                    <FlatList
-                                        data={calendarData}
-                                        renderItem={renderItem}
-                                        keyExtractor={item => item.day}
-                                        numColumns={7}
-                                        key={7}
-                                        style={styles.calenderFlatListContainer}
-                                    />
-                                )}
+                                <View style={styles.calendarWrapper}>
+                                    <View style={styles.calendarDayContainer}>
+                                        {DAYS.map((day, index) => {
+                                            return (
+                                                <View key={index} style={{ width: tileSize, height: tileSize, ...styles.calendarDayWrapper }}>
+                                                    <Text style={styles.calendarDay}>{day}</Text>
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
+                                    {isLoading && <View><Text style={styles.textStyle}>Loading....</Text></View>}
+                                    {!isLoading && calendarData && (
+                                        <FlatList
+                                            data={calendarData}
+                                            renderItem={renderItem}
+                                            keyExtractor={item => item.day}
+                                            numColumns={7}
+                                            key={7}
+                                            style={styles.calenderFlatListContainer}
+                                        />
+                                    )}
 
+                                </View>
                             </View>
                         </View>
                         <View style={styles.logOutContainer}>
@@ -292,7 +297,7 @@ function HomeScreen({ navigation }): JSX.Element {
                                 <AntDesignIcon name="logout" color={'red'} size={20} />
                             </TouchableOpacity>
                         </View>
-                    </>
+                    </View>
 
                 )}
             </PageContainer>
@@ -323,6 +328,13 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '500',
         marginLeft: 32
+    },
+    wrapperStyle: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: '80%'
     },
     logo: {
         color: 'white',
