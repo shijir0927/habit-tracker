@@ -200,11 +200,9 @@ function HomeScreen({ navigation }): JSX.Element {
             setLoggedIn(true)
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-                // when user hasn't signed in yet
-                Alert.alert('Please Sign in')
                 setLoggedIn(false)
             } else {
-                Alert.alert('Something else went wrong... ', error.toString())
+                Alert.alert('There was an error loggin in: ', error.toString())
                 setLoggedIn(false)
             }
         }
@@ -231,12 +229,10 @@ function HomeScreen({ navigation }): JSX.Element {
                 {!loggedIn && (<>
                     <View style={styles.signInContainer}>
                         <Text style={styles.logo}>Habits</Text>
-                        <GoogleSigninButton
-                            style={{ width: 192, height: 48 }}
-                            size={GoogleSigninButton.Size.Wide}
-                            color={GoogleSigninButton.Color.Dark}
-                            onPress={() => signIn()}
-                        />
+                        <Pressable style={styles.signInButtonContainer} onPress={() => signIn()}>
+                            <AntDesignIcon name='google' size={16} color={'white'} />
+                            <Text style={styles.signInText}>SIGN IN WITH GOOGLE</Text>
+                        </Pressable>
                     </View>
                 </>)}
                 {loggedIn && (
@@ -311,12 +307,29 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    signInButtonContainer: {
+        borderRadius: 64,
+        borderColor: '#fff',
+        borderWidth: 2,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingVertical: 16,
+    },
+    signInText: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: '500',
+        marginLeft: 32
+    },
     logo: {
         color: 'white',
         textAlign: 'center',
         fontSize: 32,
         fontWeight: '700',
-        marginBottom: 24
+        marginBottom: 64
     },
     textStyle: {
         color: '#fff',
