@@ -237,7 +237,6 @@ function HomeScreen({ navigation }): JSX.Element {
             await getCurrentUserInfo();
         } else {
             await getHabitsData();
-            await getCalendarData()
         }
     }
 
@@ -250,6 +249,10 @@ function HomeScreen({ navigation }): JSX.Element {
 
         handleRerender();
     }, [year, month, loggedIn]);
+
+    useEffect(() => {
+        getCalendarData();
+    }, [habitsData])
 
     return (
         <>
