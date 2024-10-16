@@ -8,7 +8,8 @@ import {
     Text
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import COLOR_MAP from '../constants/color_map';
 
 type HabitProps = PropsWithChildren<{
     title: string;
@@ -31,7 +32,7 @@ function Habit({ title, id }: HabitProps): JSX.Element {
         <View style={styles.container}>
             <Text style={styles.textStyle}>• {title}</Text>
             <Pressable onPress={deleteHabit}>
-                <Text style={styles.delete}>Delete</Text>
+                <AntDesignIcon name="delete" size={18} color={'red'} />
             </Pressable>
         </View>
     );
