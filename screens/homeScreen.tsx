@@ -114,7 +114,6 @@ function HomeScreen({ navigation }): JSX.Element {
 
         if (item.year != 0 && item.month != 0 && item.day != 0) {
             let percentage_of_completed_habits = await get_percentage_of_completed_habits(item);
-            console.log(percentage_of_completed_habits);
             if (percentage_of_completed_habits > 0 && percentage_of_completed_habits < 20) {
                 percentage_of_completed_habits = 20;
             } else if (percentage_of_completed_habits > 20 && percentage_of_completed_habits < 40) {
@@ -170,7 +169,7 @@ function HomeScreen({ navigation }): JSX.Element {
                 // play services not available or outdated
             } else {
                 // some other error happened
-                console.log(error);
+                console.log("Sign in error: ", error);
             }
         }
     };
@@ -181,7 +180,7 @@ function HomeScreen({ navigation }): JSX.Element {
             '',
             [
                 { text: 'Yes', onPress: () => signOut() },
-                { text: 'No', onPress: () => console.log('No pressed') }
+                { text: 'No', onPress: () => null }
             ],
             { cancelable: false },
         );
@@ -193,11 +192,11 @@ function HomeScreen({ navigation }): JSX.Element {
             await GoogleSignin.signOut();
             auth()
                 .signOut()
-                .then(() => console.log('Your are signed out!'));
+                .then(() => console.log('User is signed out!', userInfo.id));
             setLoggedIn(false);
             setUserInfo({});
         } catch (error) {
-            console.error(error);
+            console.error('Sign out error: ', error);
         }
     };
 
