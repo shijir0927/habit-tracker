@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
     StatusBar,
     StyleSheet,
     Text,
@@ -10,14 +8,13 @@ import {
     Alert,
     FlatList,
     Dimensions,
-    Button,
+    Image,
     TouchableOpacity
 } from 'react-native';
 import calendar from 'calendar-js';
 import { Tile, NewButton, PageContainer, SkeletonLoading } from '../components'
 import {
     GoogleSignin,
-    GoogleSigninButton,
     statusCodes,
 } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
@@ -263,7 +260,10 @@ function HomeScreen({ navigation }): JSX.Element {
             <PageContainer>
                 {!loggedIn && (<>
                     <View style={styles.signInContainer}>
-                        <Text style={styles.logo}>habits</Text>
+                        <View style={styles.signInLogoContainer}>
+                            <Image style={styles.logoStyle} source={require('../assets/images/planet.png')} />
+                            <Text style={styles.logo}>habits</Text>
+                        </View>
                         <Pressable style={styles.signInButtonContainer} onPress={() => signIn()}>
                             <AntDesignIcon name='google' size={16} color={'white'} />
                             <Text style={styles.signInText}>SIGN IN WITH GOOGLE</Text>
@@ -361,6 +361,17 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         marginLeft: 32
     },
+    signInLogoContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+        marginBottom: 64
+    },
+    logoStyle: {
+        width: 50,
+        height: 50,
+    },
     wrapperStyle: {
         display: 'flex',
         flexDirection: 'column',
@@ -373,7 +384,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 42,
         fontWeight: '700',
-        marginBottom: 64
     },
     textStyle: {
         color: '#fff',
