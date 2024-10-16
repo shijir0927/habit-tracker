@@ -11,6 +11,7 @@ import {
     Image,
     TouchableOpacity
 } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import calendar from 'calendar-js';
 import { Tile, NewButton, PageContainer, SkeletonLoading } from '../components'
 import {
@@ -33,7 +34,7 @@ function HomeScreen({ navigation }): JSX.Element {
     const numOfColumns = 7;
     const tileSize = (screenWidth - 64 - 56) / numOfColumns;
 
-
+    const isFocused = useIsFocused();
     const [month, setMonth] = useState(today.getMonth() + 1)
     const [year, setYear] = useState(today.getFullYear())
     const [loggedIn, setLoggedIn] = useState(false);
@@ -244,8 +245,10 @@ function HomeScreen({ navigation }): JSX.Element {
             offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
         });
 
-        handleRerender();
-    }, [year, month, loggedIn]);
+        if (isFocused) {
+            handleRerender();
+        }
+    }, [year, month, loggedIn, isFocused]);
 
     useEffect(() => {
         getCalendarData();
