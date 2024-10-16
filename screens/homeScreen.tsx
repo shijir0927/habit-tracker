@@ -96,7 +96,7 @@ function HomeScreen({ navigation }): JSX.Element {
                 .get()
 
             if (daysSnapshot.docs !== undefined && daysSnapshot.docs.length > 0) {
-                percent = (daysSnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length * 100) / 10
+                percent = (daysSnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length * 100) / 5
             }
             resolve(percent)
         });
@@ -107,6 +107,7 @@ function HomeScreen({ navigation }): JSX.Element {
 
         if (item.year != 0 && item.month != 0 && item.day != 0) {
             let percentage_of_completed_habits = await get_percentage_of_completed_habits(item);
+            console.log(percentage_of_completed_habits);
             if (percentage_of_completed_habits > 0 && percentage_of_completed_habits < 20) {
                 percentage_of_completed_habits = 20;
             } else if (percentage_of_completed_habits > 20 && percentage_of_completed_habits < 40) {
@@ -244,12 +245,12 @@ function HomeScreen({ navigation }): JSX.Element {
                             <View style={styles.headerContainer}>
                                 <View>
                                     <View style={styles.headerTiles}>
-                                        <Tile color={'#18181B'} handlePress={() => null} size={20} />
-                                        <Tile color={'#4C1D95'} handlePress={() => null} size={20} />
-                                        <Tile color={'#5B21B6'} handlePress={() => null} size={20} />
-                                        <Tile color={'#6D28D9'} handlePress={() => null} size={20} />
-                                        <Tile color={'#7C3AED'} handlePress={() => null} size={20} />
-                                        <Tile color={'#8B5CF6'} handlePress={() => null} size={20} />
+                                        <Tile color={COLOR_MAP["0"]} handlePress={() => null} size={20} />
+                                        <Tile color={COLOR_MAP["20"]} handlePress={() => null} size={20} />
+                                        <Tile color={COLOR_MAP["40"]} handlePress={() => null} size={20} />
+                                        <Tile color={COLOR_MAP["60"]} handlePress={() => null} size={20} />
+                                        <Tile color={COLOR_MAP["80"]} handlePress={() => null} size={20} />
+                                        <Tile color={COLOR_MAP["100"]} handlePress={() => null} size={20} />
                                     </View>
                                     <Text style={styles.headerTextStyle}>habits</Text>
                                 </View>
