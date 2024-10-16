@@ -32,7 +32,7 @@ function Habit({ title, id }: HabitProps): JSX.Element {
         <View style={styles.container}>
             <Text style={styles.textStyle}>• {title}</Text>
             <Pressable onPress={deleteHabit}>
-                <AntDesignIcon name="delete" size={18} color={'red'} />
+                <AntDesignIcon name="delete" size={18} color={'#d50000'} />
             </Pressable>
         </View>
     );

@@ -326,7 +326,7 @@ function HomeScreen({ navigation }): JSX.Element {
                         </View>
                         <View style={styles.logOutContainer}>
                             <TouchableOpacity onPress={() => handleLogOutPress()}>
-                                <AntDesignIcon name="closecircleo" color={'red'} size={20} />
+                                <AntDesignIcon name="closecircleo" color={'#d50000'} size={20} />
                             </TouchableOpacity>
                         </View>
                     </View>
