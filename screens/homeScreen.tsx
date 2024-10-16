@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 12,
         fontWeight: '500',
-        marginLeft: 32
+        marginLeft: 12
     },
     signInLogoContainer: {
         display: 'flex',
