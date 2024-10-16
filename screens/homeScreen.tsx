@@ -43,8 +43,10 @@ function HomeScreen({ navigation }): JSX.Element {
     const [userInfo, setUserInfo] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [calendarData, setCalendarData] = useState([]);
+    const [habitsData, setHabitsData] = useState([]);
 
     const dayRef = firestore().collection('days');
+    const habitsRef = firestore().collection('habits');
 
     const handlePrevMonth = () => {
         if (month == 1) {
@@ -81,7 +83,7 @@ function HomeScreen({ navigation }): JSX.Element {
         for (let i = 1; i < firstWeekday; i++) {
             data.unshift({ year: 0, month: 0, day: 0 })
         }
-        setCalendarData(data)
+        setCalendarData(data);
         setIsLoading(false);
         return data;
     }
@@ -96,7 +98,12 @@ function HomeScreen({ navigation }): JSX.Element {
                 .get()
 
             if (daysSnapshot.docs !== undefined && daysSnapshot.docs.length > 0) {
-                percent = (daysSnapshot.docs.map((record) => record.data().completed).filter((x) => x == true).length * 100) / 5
+                percent = (daysSnapshot.docs.map((record) => {
+                    return {
+                        title: record.data().title,
+                        completed: record.data().completed
+                    }
+                }).filter((dayRecord) => dayRecord.completed == true && habitsData.includes(dayRecord.title)).length * 100) / habitsData.length;
             }
             resolve(percent)
         });
@@ -209,6 +216,32 @@ function HomeScreen({ navigation }): JSX.Element {
         }
     }
 
+    const getHabitsData = async () => {
+        try {
+            let habitsData: string[] = [];
+            const querySnapshot = await habitsRef
+                .where('userId', '==', userInfo.id.toString())
+                .get();
+
+            querySnapshot.forEach(doc => {
+                const { title } = doc.data();
+                habitsData.push(title);
+            });
+            setHabitsData(habitsData);
+        } catch (error) {
+            Alert.alert('There was an error fetching habit count: ', error.toString());
+        }
+    }
+
+    const handleRerender = async () => {
+        if (!loggedIn) {
+            await getCurrentUserInfo();
+        } else {
+            await getHabitsData();
+            await getCalendarData()
+        }
+    }
+
     useEffect(() => {
         GoogleSignin.configure({
             webClientId://TODO move this to .env file
@@ -216,11 +249,7 @@ function HomeScreen({ navigation }): JSX.Element {
             offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
         });
 
-        if (!loggedIn) {
-            getCurrentUserInfo();
-        } else {
-            getCalendarData();
-        }
+        handleRerender();
     }, [year, month, loggedIn]);
 
     return (
