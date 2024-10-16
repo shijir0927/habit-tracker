@@ -14,7 +14,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import calendar from 'calendar-js';
-import { Tile, NewButton, PageContainer } from '../components'
+import { Tile, NewButton, PageContainer, SkeletonLoading } from '../components'
 import {
     GoogleSignin,
     GoogleSigninButton,
@@ -307,7 +307,7 @@ function HomeScreen({ navigation }): JSX.Element {
                                             )
                                         })}
                                     </View>
-                                    {isLoading && <View><Text style={styles.textStyle}>Loading....</Text></View>}
+                                    {isLoading && <SkeletonLoading />}
                                     {!isLoading && calendarData && (
                                         <FlatList
                                             data={calendarData}
