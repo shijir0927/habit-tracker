@@ -25,7 +25,8 @@ function NewButton({ handlePress }: NewButtonProps): JSX.Element {
 const styles = StyleSheet.create({
     textStyle: {
         color: '#fff',
-        marginLeft: 16
+        marginLeft: 12,
+        fontFamily: 'Manrope-Medium'
     },
     newButton: {
         borderColor: COLOR_MAP["60"],

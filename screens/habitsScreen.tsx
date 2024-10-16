@@ -91,13 +91,15 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 20,
         fontWeight: '600',
-        marginBottom: 24
+        marginBottom: 24,
+        fontFamily: 'Manrope-Medium'
     },
     buttonTextStyle: {
         color: '#fff',
         textAlign: 'center',
         fontWeight: '600',
-        fontSize: 14
+        fontSize: 14,
+        fontFamily: 'Manrope-Extrabold'
     },
     inputStyle: {
         borderColor: '#27272A',
@@ -109,7 +111,8 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         backgroundColor: '#18181B',
         marginTop: 32,
-        color: '#fff'
+        color: '#fff',
+        fontFamily: 'Manrope-Medium'
     },
     buttonStyle: {
         backgroundColor: '#16A34A',

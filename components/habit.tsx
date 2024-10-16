@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: '#fff',
-        fontSize: 18
+        fontSize: 18,
+        fontFamily: 'Manrope-Medium'
     },
     delete: {
         color: 'red',

@@ -362,7 +362,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 12,
         fontWeight: '500',
-        marginLeft: 12
+        marginLeft: 12,
+        fontFamily: 'Manrope-medium'
     },
     signInLogoContainer: {
         display: 'flex',
@@ -387,16 +388,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 42,
         fontWeight: '700',
-        fontFamily: 'Manrope-Medium'
+        fontFamily: 'Manrope-Extrabold'
     },
     textStyle: {
         color: '#fff',
-        fontFamily: 'Inter-Medium',
+        fontFamily: 'Manrope-Medium',
         fontSize: 16
     },
     headerTextStyle: {
         color: '#fff',
-        fontFamily: 'Inter-ExtraBold',
+        fontFamily: 'Manrope-Extrabold',
         fontSize: 32
     },
     headerContainer: {
@@ -431,7 +432,8 @@ const styles = StyleSheet.create({
     },
     calendarDay: {
         color: '#A1A1AA',
-        fontSize: 24
+        fontSize: 24,
+        fontFamily: 'Manrope-Medium'
     },
     calendarDayWrapper: {
         marginRight: 8,
