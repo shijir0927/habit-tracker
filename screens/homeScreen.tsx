@@ -261,7 +261,7 @@ function HomeScreen({ navigation }): JSX.Element {
             <PageContainer>
                 {!loggedIn && (<>
                     <View style={styles.signInContainer}>
-                        <Text style={styles.logo}>Habits</Text>
+                        <Text style={styles.logo}>habits</Text>
                         <Pressable style={styles.signInButtonContainer} onPress={() => signIn()}>
                             <AntDesignIcon name='google' size={16} color={'white'} />
                             <Text style={styles.signInText}>SIGN IN WITH GOOGLE</Text>
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     logo: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 32,
+        fontSize: 42,
         fontWeight: '700',
         marginBottom: 64
     },
