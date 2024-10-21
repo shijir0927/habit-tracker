@@ -264,7 +264,7 @@ function HomeScreen({ navigation }): JSX.Element {
                 {!loggedIn && (<>
                     <View style={styles.signInContainer}>
                         <View style={styles.signInLogoContainer}>
-                            <Image style={styles.logoStyle} source={require('../assets/images/planet.png')} />
+                            <Image style={styles.logoStyle} source={require('../assets/images/white-planet.png')} />
                             <Text style={styles.logo}>habits</Text>
                         </View>
                         <Pressable style={styles.signInButtonContainer} onPress={() => signIn()}>
