@@ -22,6 +22,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import COLOR_MAP from '../constants/color_map';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import { GOOGLE_SIGN_IN_WEB_CLIENT_ID } from '@env'
 
 function HomeScreen({ navigation }): JSX.Element {
     const backgroundStyle = {
@@ -240,9 +241,8 @@ function HomeScreen({ navigation }): JSX.Element {
 
     useEffect(() => {
         GoogleSignin.configure({
-            webClientId://TODO move this to .env file
-                '985723193964-0iqbolfe82pkudeedm0k986mc6v7c4tj.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-            offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+            webClientId: GOOGLE_SIGN_IN_WEB_CLIENT_ID,
+            offlineAccess: true,
         });
 
         if (isFocused) {
