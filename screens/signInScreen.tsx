@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
-    TextInput,
     View,
     Alert,
-    Pressable,
-    FlatList,
-    Button,
     StatusBar
 } from 'react-native';
-import { PageContainer, Habit } from '../components'
-import firestore from '@react-native-firebase/firestore';
 import {
     GoogleSignin,
     GoogleSigninButton,
@@ -34,26 +27,20 @@ function SignInScreen(): JSX.Element {
 
     const signIn = async () => {
         try {
-            console.log("here");
             await GoogleSignin.hasPlayServices();
-            console.log("here1");
             const response = await GoogleSignin.signIn();
             const { accessToken, idToken, user } = response;
-            console.log("response: ", response);
             setUserInfo(user);
             setLoggedIn(true);
-            console.log("here3");
             const credential = auth.GoogleAuthProvider.credential(
                 idToken,
                 accessToken,
             );
-            console.log("here4");
             await auth().signInWithCredential(credential);
-            console.log("here5");
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
-                Alert.alert('Cancel');
+                Alert.alert('Sign in attempt cancelled!');
             } else if (error.code === statusCodes.IN_PROGRESS) {
                 Alert.alert('Signin in progress');
                 // operation (f.e. sign in) is in progress already
@@ -62,7 +49,7 @@ function SignInScreen(): JSX.Element {
                 // play services not available or outdated
             } else {
                 // some other error happened
-                console.log(error);
+                Alert.alert(error);
             }
         }
     };
