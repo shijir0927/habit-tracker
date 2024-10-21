@@ -18,7 +18,6 @@ function NewButton({ handlePress }: NewButtonProps): JSX.Element {
     return (
         <TouchableOpacity style={styles.newButton} onPress={handlePress}>
             <AntDesignIcon name="plus" color={COLOR_MAP["60"]} size={20} />
-            <Text style={styles.textStyle}>New</Text>
         </TouchableOpacity>);
 }
 
@@ -34,8 +33,8 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingTop: 12,
         paddingBottom: 12,
-        paddingRight: 16,
-        paddingLeft: 16,
+        paddingRight: 12,
+        paddingLeft: 12,
         display: 'flex',
         flexDirection: 'row'
     },
