@@ -159,7 +159,7 @@ function HomeScreen({ navigation }): JSX.Element {
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
-                Alert.alert('Cancel');
+                Alert.alert('Sign in cancelled');
             } else if (error.code === statusCodes.IN_PROGRESS) {
                 Alert.alert('Signin in progress');
                 // operation (f.e. sign in) is in progress already
