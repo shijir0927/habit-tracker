@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import calendar from 'calendar-js';
-import { Tile, NewButton, PageContainer, SkeletonLoading } from '../components'
+import { Tile, NewButton, PageContainer, SkeletonLoading } from '../components';
 import {
     GoogleSignin,
     statusCodes,
@@ -21,8 +21,8 @@ import {
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import COLOR_MAP from '../constants/color_map';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import { GOOGLE_SIGN_IN_WEB_CLIENT_ID } from '@env'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import { GOOGLE_SIGN_IN_WEB_CLIENT_ID } from '@env';
 
 function HomeScreen({ navigation }): JSX.Element {
     const backgroundStyle = {

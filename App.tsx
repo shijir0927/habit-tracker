@@ -9,13 +9,6 @@ function App(): JSX.Element {
   return (
     <NavigationContainer>
       <HomeStack.Navigator initialRouteName='Home'>
-        <HomeStack.Screen name="SignIn" component={SignInScreen} options={{
-          title: '',
-          headerStyle: {
-            backgroundColor: '#000'
-          },
-          headerTintColor: '#fff'
-        }} />
         <HomeStack.Screen name="Home" component={HomeScreen} options={{
           title: '',
           headerStyle: {
